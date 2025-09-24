@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }}'s Dashboard</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 40px;">
+
+    <h1 style="color: #333;">Welcome, <span style="color: #007BFF;">{{ user.name }}</span>!</h1>
+
+    <nav style="margin-bottom: 30px;">
+        <a href="/superUserdashboard/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Home</a> |
+        <a href="/allusers/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">User List</a> |
+        <a href="/superUsersearch/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Search</a> |
+        <a href="/superUsersummary/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Summary</a> |
+        <a href="/" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Logout</a> |
+        <a href="/editprofile/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Edit Profile</a>
+    </nav>
+
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="text-align: center; color: #d9534f; background-color: #f2dede; padding: 10px 0; margin-bottom: 20px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+
+    <!-- 🔍 Search Parking Lots -->
+    <div style="background-color: #fff; padding: 30px; margin: 20px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center;">
+        <h2 style="color: #333;">🔍 Search Parking Lots by Pin Code</h2>
+
+        <form method="POST" action="/superUsersearch/{{ user.uid }}">
+            <label for="pincode"><b>Select Pin Code:</b></label><br><br>
+            <select name="pincode" id="pincode" required style="padding: 8px; width: 200px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="" disabled selected>-- Choose a pincode --</option>
+                {% for pin in all_pincodes %}
+                    <option value="{{ pin.pin_code }}" >{{ pin.pin_code }}</option>
+                {% endfor %}
+            </select><br><br>
+            <button type="submit" style="padding: 8px 16px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+        </form>
+    </div>
+
+    {% if results %}
+    <div style="background-color: #fff; padding: 30px; margin: 20px auto; width: 90%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #007BFF;">📍 Available Parking Lots in {{ selected_pincode }}</h2>
+        <table border="1" cellpadding="8" cellspacing="0" width="100%" style="border-collapse: collapse; margin-top: 15px;">
+            <tr style="background-color: #f9f9f9;">
+                <th>Lot ID</th>
+                <th>Lot Name</th>
+                <th>Location</th>
+                <th>Occupied Spots</th>
+                <th>Available Spots</th>
+                <th>Actions</th>
+            </tr>
+            {% for lot in results %}
+            <tr>
+                <td>{{ lot.pl_id }}</td>
+                <td>{{ lot.lot_name }}</td>
+                <td>{{ lot.lot_address }}</td>
+                <td>{{ lot.occupied_spots }}</td>
+                <td>{{ lot.available_spots }}</td>
+                <td>
+                    <p style="margin-top: 10px;">
+                        <a href="/editparkinglot/{{ lot.pl_id }}" style="color: #28a745; text-decoration: none;">✏️ Edit</a> |
+                        <a href="/deleteparkinglot/{{ lot.pl_id }}" style="color: #d9534f; text-decoration: none;">❌ Delete</a>
+                    </p>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+    </div>
+
+</body>
+</html>

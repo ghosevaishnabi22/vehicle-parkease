@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Summary - {{ user.name }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 40px;">
+
+    <h1 style="color: #333;">User Summary for <span style="color: #007BFF;">{{ user.name }}</span></h1>
+
+    <!-- Navigation Bar -->
+    <nav style="margin-bottom: 30px;">
+        <a href="/userdashboard/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Home</a> |
+        <a href="/userSummary/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Summary</a> |
+        <a href="/" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Logout</a> |
+        <a href="/editprofile/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Edit Profile</a>
+    </nav>
+
+    <!-- User Info -->
+    <div style="background-color: #fff; padding: 25px; margin: 20px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: left;">
+        <h2 style="color: #007BFF;">👤 User Details</h2>
+        <p><b>Username:</b> {{ user.username }}</p>
+        <p><b>Phone:</b> {{ user.phone }}</p>
+        <p><b>Address:</b> {{ user.address }}</p>
+    </div>
+
+    <!-- Chart 1 -->
+    <div style="background-color: #fff; padding: 25px; margin: 30px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">📊 Reservation History Over Time</h2>
+        <img src="{{ url_for('static', filename='reservation_history.png') }}" alt="Reservation History" style="width: 90%; max-width: 800px; border: 1px solid #ccc;">
+    </div>
+
+    <!-- Chart 2 -->
+    <div style="background-color: #fff; padding: 25px; margin: 30px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">💸 Total Amount Spent in Each Parking Lot</h2>
+        <img src="{{ url_for('static', filename='user_revenue_per_lot.png') }}" alt="Revenue per Lot" style="width: 90%; max-width: 800px; border: 1px solid #ccc;">
+    </div>
+
+    <!-- Chart 3 -->
+    <div style="background-color: #fff; padding: 25px; margin: 30px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">📌 Active vs Released Reservations</h2>
+        <img src="{{ url_for('static', filename='active_reservations_pie_chart.png') }}" alt="Active Reservations Pie Chart" style="width: 90%; max-width: 800px; border: 1px solid #ccc;">
+    </div>
+
+    <!-- Chart 4 -->
+    <div style="background-color: #fff; padding: 25px; margin: 30px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">⏱️ Parking Duration (Minutes)</h2>
+        <img src="{{ url_for('static', filename='average_parking_duration.png') }}" alt="Parking Duration Histogram" style="width: 90%; max-width: 800px; border: 1px solid #ccc;">
+    </div>
+
+</body>
+</html>

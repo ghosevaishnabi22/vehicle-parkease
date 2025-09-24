@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spot Reservation Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .wrapper {
+            display: inline-block;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 500px;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: white;
+            width: 40%;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🔎 Spot<span style="color: #007BFF;"> Details</span></h2>
+
+    <div class="wrapper">
+        <table>
+            <tr><th>Spot ID</th><td>{{ spot.spot_number }}</td></tr>
+            <tr><th>User ID</th><td>{{ user.uid }}</td></tr>
+            <tr><th>User Name</th><td>{{ user.name }}</td></tr>
+            <tr><th>Vehicle Number</th><td>{{ reservation.vehicle_number }}</td></tr>
+            <tr><th>Price / Hour</th><td>{{ spot.parking_lot.price_per_hour }}</td></tr>
+            <tr><th>Parked At</th><td>{{ reservation.parking_timestamp.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+            <tr><th>Left At</th>
+                <td>
+                    {% if reservation.leaving_timestamp %}
+                        {{ reservation.leaving_timestamp.strftime('%Y-%m-%d %H:%M') }}
+                    {% else %}
+                        <strong style="color: #FF5733;">NOT YET RELEASED</strong>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr><th>Rounded Duration</th><td>{{ rounded_duration }}</td></tr>
+            <tr><th>Estimated Cost</th><td>₹{{ est_cost }}</td></tr>
+        </table>
+
+        <a href="/superUserdashboard/{{ users.uid }}">⬅ Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

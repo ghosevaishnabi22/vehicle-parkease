@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 60px;">
+
+    <h2 style="color: #333;">Welcome to <span style="color: #007BFF;">Vehicle ParkEase</span><br>Login</h2>
+
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="text-align: center; color: #d9534f; background-color: #f2dede; padding: 10px 0; margin-bottom: 20px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" action="/login" style="background-color: #fff; padding: 100px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: inline-block; margin-top: 20px; margin-bottom: 75px;">
+        
+        <input type="email" name="username" placeholder="Registered Email ID" required
+               style="display: block; margin: 15px auto; padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+        <input type="password" name="password" placeholder="Password" required
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@])[A-Za-z\d@]{8,}"
+                title="At least 8 characters, 1 uppercase, 1 lowercase, 1 number, and only @ as special character"
+                style="display: block; margin: 15px auto; padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+        <input type="submit" value="Login"
+               style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+
+        <p style="margin-top: 20px;">
+            <a href="/register" style="text-decoration: none; color: #007BFF;">New User? Create an Account</a>
+        </p>
+
+        <p style="margin-top: 10px;">
+            <a href="/forgotpassword" style="text-decoration: none; color: #007BFF;">Forgot Password?</a>
+        </p>
+
+    </form>
+
+</body>
+</html>

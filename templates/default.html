@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to Vehicle ParkEase</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: url("/static/vpev2.png") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 60px 80px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #333;
+        }
+
+        p {
+            font-size: 20px;
+            color: #555;
+        }
+
+        a {
+            display: inline-block;
+            margin: 15px;
+            padding: 14px 30px;
+            font-size: 16px;
+            text-decoration: none;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .admin-btn {
+            background-color: #007BFF;
+        }
+
+        .user-btn {
+            background-color: #28a745;
+        }
+
+        a:hover {
+            opacity: 0.85;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p>Choose your role to proceed:</p>
+        <a href="/login" class="admin-btn">Admin Login</a>
+        <a href="/login" class="user-btn">User Login</a>
+    </div>
+</body>
+</html>

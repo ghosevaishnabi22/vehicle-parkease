@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservation Details</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 60px;">
+
+    <h2 style="color: #333;">Reservation <span style="color: #007BFF;">Details</span></h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="text-align: center; color: #d9534f; background-color: #f2dede; padding: 10px 0; margin-bottom: 20px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div style="background-color: #fff; padding: 50px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); display: inline-block; margin-top: 20px; margin-bottom: 75px; text-align: left; min-width: 400px;">
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px; border: 1px solid #ccc;">
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">User Name</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ user.name }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Vehicle Number</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ reservation.vehicle_number }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Price / Hour</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ lot.price_per_hour }}</td>
+            </tr>
+            <tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Parking Timestamp</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ reservation.parking_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Leaving Timestamp</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">
+                    {% if reservation.leaving_timestamp %}
+                        {{ reservation.leaving_timestamp.strftime('%Y-%m-%d %H:%M') }}
+                    {% else %}
+                        <span style="color: #FF5733;">N/A</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Rounded Duration</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">{{ rounded_duration }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left; padding: 10px; color: #007BFF; border: 1px solid #ccc;">Estimated Cost</th>
+                <td style="padding: 10px; border: 1px solid #ccc;">₹{{ estimated_cost if estimated_cost else 'N/A' }}</td>
+            </tr>
+        </table>
+        
+        <center>
+        {% if reservation.status == 'Active' %}
+            <form method="POST" style="margin-top: 20px;">
+                <button type="submit" style="padding: 10px 20px; background-color: red; color: white; border: none; border-radius: 5px; cursor: pointer;">Release Spot</button>
+            </form>
+        {% endif %}
+
+        <p style="margin-top: 20px;">
+            <a href="/userdashboard/{{ user.uid }}" style="text-decoration: none; color: #007BFF;">⬅ Back to Dashboard</a>
+        </p>
+        </center>
+    </div>
+
+</body>
+</html>

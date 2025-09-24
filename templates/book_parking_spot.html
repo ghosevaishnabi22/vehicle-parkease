@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Parking Spot</title>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; background-color: #f2f2f2; padding-top: 50px;">
+
+    <h2 style="color: #333;">
+        Welcome to <span style="color: #007BFF;">Vehicle ParkEase</span><br>Book Your Spot
+    </h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="text-align: center; color: #d9534f; background-color: #f2dede; padding: 10px 0; margin-bottom: 20px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/bookparkingspot/{{ user.uid }}/{{ spot.ps_id }}"
+          style="background-color: #fff; display: inline-block; padding: 30px; border-radius: 10px; 
+                 box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: left; margin-bottom: 140px;">
+
+        <div style="margin: 10px 0;">
+            <label style="display: inline-block; width: 150px;">Spot ID:</label>
+            <input type="text" name="spot_id" value="{{ spot.ps_id }}" readonly
+                   style="padding: 8px; width: 250px; background-color: #eee; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+
+        <div style="margin: 10px 0;">
+            <label style="display: inline-block; width: 150px;">Lot ID:</label>
+            <input type="text" name="lot_id" value="{{ spot.lot_id }}" readonly
+                   style="padding: 8px; width: 250px; background-color: #eee; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+
+        <div style="margin: 10px 0;">
+            <label style="display: inline-block; width: 150px;">User ID:</label>
+            <input type="text" name="user_id" value="{{ user.uid }}" readonly
+                   style="padding: 8px; width: 250px; background-color: #eee; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+
+        <div style="margin: 10px 0;">
+            <label for="vehicle_number" style="display: inline-block; width: 150px;">Vehicle Number:</label>
+            <input type="text" name="vehicle_number" id="vehicle_number" required
+                   placeholder="Enter your vehicle number"
+                   style="padding: 8px; width: 250px; border: 1px solid #ccc; border-radius: 5px;">
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <button type="submit" name="action" value="reserve"
+                    style="padding: 10px 20px; background-color: #007BFF; color: white; 
+                           border: none; border-radius: 5px; cursor: pointer;">Reserve</button>
+        </div>
+
+        <p style="text-align: center; margin-top: 15px;">
+            <a href="/userdashboard/{{ user.uid }}" style="text-decoration: none; color: #007BFF;">Back to Dashboard</a>
+        </p>
+
+        
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.name }}'s Dashboard</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f2f2f2; text-align: center; padding-top: 40px;">
+
+    <h1 style="color: #333;">Welcome, <span style="color: #007BFF;">{{ user.name }}</span>!</h1>
+
+    <nav style="margin-bottom: 30px;">
+        <a href="/userdashboard/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Home</a> |
+        <a href="/userSummary/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Summary</a> |
+        <a href="/" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Logout</a> |
+        <a href="/editprofile/{{ user.uid }}" style="margin: 0 10px; color: #007BFF; text-decoration: none;">Edit Profile</a>
+    </nav>
+
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div style="text-align: center; color: #d9534f; background-color: #f2dede; padding: 10px 0; margin-bottom: 20px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+
+    <!-- 🔍 Search Parking Lots -->
+    <div style="background-color: #fff; padding: 30px; margin: 20px auto; width: 80%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center;">
+        <h2 style="color: #333;">🔍 Search Parking Lots by Pin Code</h2>
+        
+        <form method="POST" action="/userdashboard/{{ user.uid }}">
+            <label for="pincode"><b>Select Pin Code:</b></label><br><br>
+            <select name="pincode" id="pincode" required style="padding: 8px; width: 200px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="" disabled selected>-- Choose a pincode --</option>
+                {% for pin in all_pincodes %}
+                    <option value="{{ pin.pin_code }}" {% if pin.pin_code == selected_pincode %}selected{% endif %}>{{ pin.pin_code }}</option>
+                {% endfor %}
+            </select><br><br>
+            <button type="submit" style="padding: 8px 16px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">Search</button>
+        </form>
+    </div>
+
+    {% if results %}
+    <div style="background-color: #fff; padding: 30px; margin: 20px auto; width: 90%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #007BFF;">📍 Available Parking Lots in {{ selected_pincode }}</h2>
+        <table border="1" cellpadding="8" cellspacing="0" width="100%" style="border-collapse: collapse; margin-top: 15px;">
+            <tr style="background-color: #f9f9f9;">
+                <th>Lot ID</th>
+                <th>Spot Number</th>
+                <th>Lot Name</th>
+                <th>Location</th>
+                <th>Available Spots</th>
+                <th>Price per hour</th>
+            </tr>
+            {% for lot in results %}
+            <tr>
+                <td>{{ lot.pl_id }}</td>
+                <td>{{lot.available_spot_number}}</td>
+                <td>{{ lot.lot_name }}</td>
+                <td>{{ lot.lot_address }}</td>
+                <td>{{ lot.available_spots }}</td>
+                <td>{{ lot.price_per_hour }}</td>
+                
+                    <td>
+                        {% if lot.available_spots > 0 and can_book_more %}
+                            <form action="/bookparkingspot/{{ user.uid }}/{{ lot.available_spot_id }}" method="POST" style="display: inline;">
+                                <input type="text" name="vehicle_number" placeholder="Enter vehicle number" required
+                                    style="padding: 5px; width: 160px; border-radius: 5px; border: 1px solid #ccc;">
+                                <button type="submit" style="padding: 6px 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">Book</button>
+                            </form>
+                        {% elif lot.available_spots == 0 %}
+                            <span style="color: #d9534f;">No spots available</span>
+                        {% else %}
+                            <em style="color: #d9534f;">Limit reached</em>
+                        {% endif %}
+                    </td>
+
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Reservation History -->
+    <div style="background-color: #fff; padding: 30px; margin: 20px auto 60px; width: 95%; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #333;">Your Reservation History</h2>
+        {% if history %}
+            <table border="1" cellpadding="8" cellspacing="0" width="100%" style="border-collapse: collapse; margin-top: 15px;">
+                <tr style="background-color: #f9f9f9;">
+                    <th>Lot ID</th>
+                    <th>Location</th>
+                    <th>Spot Number</th>
+                    <th>Vehicle No.</th>
+                    <th>Parking Timestamp</th>
+                    <th>Leaving Timestamp</th>
+                    <th>Cost</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                {% for res in history %}
+                    <tr>
+                        <td>{{ res.lot_id }}</td>
+                        <td>{{ res.lot_address }}</td>
+                        <td>{{ res.spot_number }}</td>
+                        <td>{{ res.vehicle_number }}</td>
+                        <td>{{ res.parking_timestamp }}</td>
+                        <td>{{ res.leaving_timestamp }}</td>
+                        <td>{{ res.parking_cost }}</td>
+                        <td>{{ res.status }}</td>
+                        <td>
+                            {% if res.status == 'Active' %}
+                                <a href="/reservationdetails/{{ res.reservation_id }}" style="color: #007BFF; text-decoration: none;">Details</a>
+                            {% else %}
+                                <span style="color: #28a745;">Parked Out</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No reservation history yet.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
